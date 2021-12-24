@@ -1,5 +1,4 @@
 #include "GameScene.h"
-#include <vector>
 
 float frame = 0;
 
@@ -95,10 +94,17 @@ void GameScene::drawTetromino()
     cur_tetro = gm.createTetromino();
     for (int i = 0; i < 4; ++i)
     {
-        cur_tetro->block[i].sprite->setAnchorPoint(Point(0, 0));
-        cur_tetro->block[i].sprite->setPosition(150 + cur_tetro->block[i].x * BLOCK_SIZE, cur_tetro->block[i].y * BLOCK_SIZE);
-        this->addChild(cur_tetro->block[i].sprite);
-        board[cur_tetro->block[i].y][cur_tetro->block[i].x] = 2;
+        int cx = cur_tetro->block[i].x;
+        int cy = cur_tetro->block[i].y;
+        board[cy][cx].state = BoardInfo::fallingblock;
+        board[cy][cx].p_sprite = cur_tetro->block[i].sprite;
+        
+        board[cy][cx].p_sprite->setAnchorPoint(Point(0, 0));
+        board[cy][cx].p_sprite->setPosition(150 + cx * BLOCK_SIZE, cy * BLOCK_SIZE);
+        
+        
+        this->addChild(board[cy][cx].p_sprite);
+        
     }
 }
 
@@ -106,15 +112,21 @@ bool GameScene::downCheck()
 {
     for (int i = 0; i < 4; ++i)
     {
+        int cx = cur_tetro->block[i].x;
         int cy = cur_tetro->block[i].y;
         // 제일 밑칸이거나 밑에 블록이 있다면
-        if (cy == 0 || board[cy-1][cur_tetro->block[i].x] == BoardInfo::obstacle)
+        if (cy == 0 || board[cy-1][cx].state == BoardInfo::obstacle)
         {
             // 부딪히므로 떨어지는 테트로미노(2)를 (1)로 바꿔주기
             for (int j = 0; j < 4; ++j)
             {
-                board[cur_tetro->block[j].y][cur_tetro->block[j].x] = BoardInfo::obstacle;
+                int cx = cur_tetro->block[j].x;
+                int cy = cur_tetro->block[j].y;
+                board[cy][cx].state = BoardInfo::obstacle;
             }
+            // 줄 가득 차면 땡겨오기
+            for (int i = MAX_MAP_ROW; i >= 0; --i)
+                checkLine(i);
             return true;
         }
     }
@@ -125,17 +137,69 @@ void GameScene::fall()
 {
     for (int i = 0; i < 4; ++i)
     {
-        auto moveDown = MoveBy::create(0, Point(0, -BLOCK_SIZE));
-        cur_tetro->block[i].sprite->runAction(moveDown);
-        
-        // 보드 수정
         int cx = cur_tetro->block[i].x;
         int cy = cur_tetro->block[i].y;
-        board[cy][cx] = BoardInfo::None;
-        board[cy - 1][cx] = BoardInfo::fallingblock;
+        board[cy - 1][cx].p_sprite = board[cy][cx].p_sprite;
+    
+        // 보드 수정
+        board[cy - 1][cx].state = BoardInfo::tempblock;
+        board[cy][cx].state = BoardInfo::None;
+        board[cy][cx].p_sprite = nullptr;
+        
         cur_tetro->block[i].y -= 1;
     }
+    for (int i = 0; i < 4; ++i)
+    {
+        int cx = cur_tetro->block[i].x;
+        int cy = cur_tetro->block[i].y;
+        auto moveDown = MoveBy::create(0, Point(0, -BLOCK_SIZE));
+        board[cy][cx].state = BoardInfo::fallingblock;
+        if(board[cy][cx].p_sprite == nullptr)
+        {
+            CCLOG("%i", i);
+        }
+        else {
+            board[cy][cx].p_sprite->runAction(moveDown);
+        }
+    }
 }
+
+void GameScene::checkLine(int line)
+{
+    for (int i = 0; i < MAX_COL; ++i)
+    {
+        if(board[line][i].state == BoardInfo::None)
+            return;
+    }
+    popLine(line);
+}
+
+void GameScene::popLine(int line)
+{
+    CCLOG("popLine : %i", line);
+    for (int i = line; i <MAX_MAP_ROW; ++i)
+    {
+        for (int j = 0; j < MAX_COL; ++j)
+        {
+            // 윗줄 가져오기
+            board[i][j].state = board[i + 1][i].state;
+            board[i + 1][j].state = BoardInfo::None;
+            
+            // 원래 이미지 삭제하고 위의 이미지 보여주기
+            if(board[i][j].p_sprite != nullptr)
+                board[i][j].p_sprite->removeFromParent();
+            //
+            board[i][j].p_sprite = board[i + 1][j].p_sprite;
+            Action* moveDown = MoveBy::create(0, Point(0, -BLOCK_SIZE));
+            if (board[i][j].p_sprite != nullptr)
+            {
+                board[i][j].p_sprite->runAction(moveDown);
+            }
+            board[i + 1][j].p_sprite = nullptr;
+        }
+    }
+}
+
 
 void GameScene::leftBtnCallback(Ref* sender)
 {

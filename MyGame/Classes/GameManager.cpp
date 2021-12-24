@@ -8,7 +8,7 @@ Tetromino* GameManager::createTetromino()
     int randint = RandomHelper::random_int(0, 6);
     Tetromino* tetromino = new Tetromino();
     
-    switch (randint)
+    switch (6)
     {
         // J 블록
         case Shape::J:
@@ -18,7 +18,7 @@ Tetromino* GameManager::createTetromino()
                 tetromino->block[i].sprite = Sprite::create("blue.png", Rect(0, 0, BLOCK_SIZE, BLOCK_SIZE));
             }
             
-            int delta_shapeJ[] = {0, 0, 0, 1, -1, -1, 0, -1};
+            int delta_shapeJ[] = {0, 0, 0, 1, 0, 2, -1, 0};
             setDeltaShape(tetromino, delta_shapeJ);
             tetromino->shape = Shape::J;
             break;
@@ -31,7 +31,7 @@ Tetromino* GameManager::createTetromino()
                 tetromino->block[i].sprite = Sprite::create("skyblue.png", Rect(0, 0, BLOCK_SIZE, BLOCK_SIZE));
             }
             
-            int delta_shapeI[] = {0, 0, 0, -1, 0, 1, 0, 2};
+            int delta_shapeI[] = {0, 0, 0, 1, 0, 2, 0, 3};
             setDeltaShape(tetromino, delta_shapeI);
             tetromino->shape = Shape::I;
             break;
@@ -44,7 +44,7 @@ Tetromino* GameManager::createTetromino()
                 tetromino->block[i].sprite = Sprite::create("yellow.png", Rect(15, 15, BLOCK_SIZE, BLOCK_SIZE));
             }
             
-            int delta_shapeO[] = {0, 0, -1, 0, 0, 1, -1, 1};
+            int delta_shapeO[] = {0, 0, 0, 1, -1, 0, -1, 1};
             setDeltaShape(tetromino, delta_shapeO);
             tetromino->shape = Shape::O;
             break;
@@ -57,7 +57,7 @@ Tetromino* GameManager::createTetromino()
                 tetromino->block[i].sprite = Sprite::create("purple.png", Rect(0, 0, BLOCK_SIZE, BLOCK_SIZE));
             }
             
-            int delta_shapeH[] = {0, 0, -1, 0, 1, 0, 0, 1};
+            int delta_shapeH[] = {0, 0, -1, -1, -1, 0, -1, 1};
             setDeltaShape(tetromino, delta_shapeH);
             tetromino->shape = Shape::H;
             break;
@@ -70,7 +70,7 @@ Tetromino* GameManager::createTetromino()
                 tetromino->block[i].sprite = Sprite::create("orange.png", Rect(15, 15, BLOCK_SIZE, BLOCK_SIZE));
             }
             
-            int delta_shapeL[] = {0, 0, 0, 1, 0, -1, 1, -1};
+            int delta_shapeL[] = {0, 0, -1, 0, -1, 1, -1, 2};
             setDeltaShape(tetromino, delta_shapeL);
             tetromino->shape = Shape::L;
             break;
@@ -83,7 +83,7 @@ Tetromino* GameManager::createTetromino()
                 tetromino->block[i].sprite = Sprite::create("green.png", Rect(0, 0, BLOCK_SIZE, BLOCK_SIZE));
             }
             
-            int delta_shapeS[] = {0, 0, 0, -1, -1, 0, -1, 1};
+            int delta_shapeS[] = {0, 0, 0, 1, -1, 1, -1, 2};
             setDeltaShape(tetromino, delta_shapeS);
             tetromino->shape = Shape::S;
             break;
@@ -96,7 +96,7 @@ Tetromino* GameManager::createTetromino()
                 tetromino->block[i].sprite = Sprite::create("red.png", Rect(0, 0, BLOCK_SIZE, BLOCK_SIZE));
             }
             
-            int delta_shapeZ[] = {0, 0, 0, 1, -1, 0, -1, -1};
+            int delta_shapeZ[] = {0, 0, 0, 1, -1, -1, -1, 0};
             setDeltaShape(tetromino, delta_shapeZ);
             tetromino->shape = Shape::Z;
             break;

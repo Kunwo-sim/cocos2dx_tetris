@@ -5,3 +5,9 @@
 #include "ctime"
 
 USING_NS_CC;
+
+struct BoardState
+{
+    int state = 0;
+    Sprite* p_sprite;
+};

@@ -19,9 +19,9 @@ public:
     int originX = START_X;
     int originY = START_Y;
     
-    void moveLeft(int board[][MAX_COL]);
-    void moveRight(int board[][MAX_COL]);
-    void Rotate(int board[][MAX_COL], int r_idx);
+    void moveLeft(BoardState board[][MAX_COL]);
+    void moveRight(BoardState board[][MAX_COL]);
+    void Rotate(BoardState board[][MAX_COL], int r_idx);
     
 private:
 };
