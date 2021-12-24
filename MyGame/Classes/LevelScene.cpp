@@ -1,5 +1,5 @@
 #include "LevelScene.h"
-#include "LevelOne.h"
+#include "GameScene.h"
 
 Scene* LevelScene::createScene()
 {
@@ -18,8 +18,8 @@ bool LevelScene::init()
         return false;
     }
     
-    auto item1 = MenuItemFont::create("Level 1", CC_CALLBACK_1(LevelScene::levelOneCallback, this));
-    auto item2 = MenuItemFont::create("Level 2", CC_CALLBACK_1(LevelScene::levelOneCallback, this));
+    auto item1 = MenuItemFont::create("Level 1", CC_CALLBACK_1(LevelScene::gameSceneCallback, this));
+    auto item2 = MenuItemFont::create("Level 2", CC_CALLBACK_1(LevelScene::gameSceneCallback, this));
     
     auto levelMenu = Menu::create(item1, item2, NULL);
     levelMenu->alignItemsVertically();
@@ -27,7 +27,7 @@ bool LevelScene::init()
     return true;
 }
 
-void LevelScene::levelOneCallback(Ref *sender)
+void LevelScene::gameSceneCallback(Ref *sender)
 {
-    Director::getInstance()->replaceScene(LevelOne::createScene());
+    Director::getInstance()->replaceScene(GameScene::createScene());
 }

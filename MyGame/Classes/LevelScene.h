@@ -13,7 +13,7 @@ public:
     CREATE_FUNC(LevelScene);
     
 private:
-    void levelOneCallback(Ref* sender);
+    void gameSceneCallback(Ref* sender);
     void levelTwoCallback(Ref* sender);
 
 };

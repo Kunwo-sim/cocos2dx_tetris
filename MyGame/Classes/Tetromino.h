@@ -13,7 +13,15 @@ class Tetromino
 {
 public:
     Block block[4];
+    
+    int rotateidx = 0;
+    int shape = 0;
     int originX = START_X;
     int originY = START_Y;
+    
+    void moveLeft(int board[][MAX_COL]);
+    void moveRight(int board[][MAX_COL]);
+    void Rotate(int board[][MAX_COL], int r_idx);
+    
 private:
 };
